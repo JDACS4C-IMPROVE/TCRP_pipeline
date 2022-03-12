@@ -21,9 +21,9 @@ parser = argparse.ArgumentParser()
 #work_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/'
 #data_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/tissue_test_data/'
 #work_dic = '/cellar/users/samsonfong/Projects/tcrp-v2/from-ma/cell_line_lists/'
-work_dic = '/mnt/beegfs/users/shfong/projects/TCRP-refactored/tcrp-original/data/cell_line_lists/'
+work_dic = '/data/Pre_training/'
 #data_dic = '/cellar/users/samsonfong/Projects/tcrp-v2/from-ma/drug_feature/'
-data_dic = '/mnt/beegfs/users/shfong/projects/TCRP-refactored/tcrp-original/data/drug_feature/'
+data_dic = '/data/Pre_training/drug_feature/'
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 
@@ -40,7 +40,7 @@ parser.add_argument('--fewshot_data_path', type=str, default=None, help='Path to
 
 args = parser.parse_args()
 
-job_directory = dir_name + '/output/{}/'.format(args.run_name)
+job_directory = "/data" + '/output/{}/'.format(args.run_name)
 if args.fewshot_data_path is None:
 	fewshot_data_path = job_directory
 else: 

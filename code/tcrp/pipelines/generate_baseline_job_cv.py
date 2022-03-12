@@ -21,10 +21,10 @@ drug_list_file, job, job_id = args.drug_list_file, args.job, args.job_id
 #work_dic = '/share/data/jinbodata/siqi/Drug_data/'
 #work_dic = '/share/data/jinbodata/siqi/mut_exp_cnv_data/challenge_1b/'
 #work_dic = '/cellar/users/samsonfong/Projects/tcrp-v2/from-ma/cell_line_lists/'
-work_dic = '/mnt/beegfs/users/shfong/projects/TCRP-refactored/tcrp-original/data/cell_line_lists/'
+work_dic = '/data/Pre_training/'
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
-job_directory = dir_name + '/output/{}/'.format(args.run_name)
+job_directory =  '/code/tcrp/baselines/{}/'.format(args.run_name)
 
 file_handle = open( drug_list_file )
 
@@ -45,16 +45,17 @@ for line in file_handle:
 	with open(tissue_list, 'rb') as f:
 		tissue_map = pickle.load(f)
 
-	for tissue, tissue_cell_line in tissue_map.items():
-		if len(tissue_cell_line) < 15:
-			continue
-
-		# Assuming fewshot samples already exist...
-		# cmd_str = '$python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
-		# cmd_list.append(cmd_str)
-		
-		cmd_str = '$python ' + dir_name + '/' + 'baseline_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 20' + ' --run_name ' + args.run_name  + fewshot_data_path_str
-		cmd_list.append( cmd_str )						
+	# for tissue, tissue_cell_line in tissue_map.items():
+	tissue = "breast"
+	tissue_cell_line = tissue_map[tissue]
+	if len(tissue_cell_line) < 15:
+		continue
+	# Assuming fewshot samples already exist...
+	cmd_str = '$python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
+	cmd_list.append(cmd_str)
+	
+	cmd_str = '$python ' + '/code/tcrp/baselines/baseline_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 20' + ' --run_name ' + args.run_name  + fewshot_data_path_str
+	cmd_list.append( cmd_str )						
 
 file_handle.close()
 

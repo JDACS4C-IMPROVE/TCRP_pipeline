@@ -48,11 +48,10 @@ from model.mlp import mlp
 
 # Training settings
 parser = argparse.ArgumentParser()
-work_dic = home_dir + '/data/cell_line_lists/'
-data_dic = home_dir + '/data/drug_feature/'
-print(dir_name)
-print(__file__)
-
+work_dic ='/data/Pre_training/'
+data_dic ='/data/Pre_training/drug_feature/'
+##print(dir_name)
+##print(__file__)
 parser.add_argument('--tissue', type=str, default='UPPER_AERODIGESTIVE_TRACT', help='Validation tissue, using the rest tissues for training')
 parser.add_argument('--drug', type=str, default='AC220', help='Treated drug')
 parser.add_argument('--K', type=int, default=5, help='Perform K shot learning')
@@ -106,11 +105,9 @@ for trial in range(num_trials):
     test_X, test_y = [np.vstack([mat.cpu() for mat in mats]) for mats in  zip(*unseen_test_loader)]
     
     for i in range(1, K+1): 
-        filename = "{}_{}_{}-shot_{}-trial_train".format(args.drug, args.tissue, i, trial)
-        filename = tissue_directory + filename
+        filename = "/data/few_shot/{}_{}_{}-shot_{}-trial_train".format(args.drug, args.tissue, i, trial)
         np.savez(filename, train_X=train_X[:i], train_y=train_y[:i])
         
-    filename = "{}_{}_{}-trial_test".format(args.drug, args.tissue, trial)
-    filename = tissue_directory + filename
+    filename = "/data/few_shot/{}_{}_{}-trial_test".format(args.drug, args.tissue, trial)
     np.savez(filename, test_X=test_X, test_y=test_y)
                     

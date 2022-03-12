@@ -19,9 +19,8 @@ drug_list_file, job, job_id = args.drug_list_file, args.job, args.job_id
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
-print home_dir
-work_dic = home_dir + '/data/cell_line_lists/'
-job_directory = home_dir + '/output/{}/'.format(args.run_name)
+work_dic = '/data/Pre_training/'
+job_directory = '/results/{}/'.format(args.run_name)
 
 file_handle = open( drug_list_file )
 
@@ -44,7 +43,7 @@ for line in file_handle:
 		if len(tissue_cell_line) < 15:
 			continue
 
-		cmd_str = '$python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
+		cmd_str = '$python ' + '/root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
 		cmd_list.append(cmd_str)
 		
 		log_folder = job_directory + 'run-logs/{}/{}/'.format(gene, tissue)

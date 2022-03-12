@@ -39,7 +39,7 @@ def pearson_corr(x, y):
 def load_merged_data(tissue_map, drug, path='/home-nfs/wangsheng/GDSC_PDX_WP_feature/'):
 
 	#Load dataset
-	#print 'Loading feature and label files...'
+	#print'Loading feature and label files...'
 
 	feature_list, label_list, tissue2id, tissue_index_list = [], [], [], []
 	sample2tissue = {}
@@ -174,7 +174,7 @@ def load_data_cell_line(tissue_map, drug, tissue_arg, K, path='/home-nfs/wangshe
 
 	i = [ind for ind, i in enumerate(tissue_order) if i == tissue_arg]
 	if len(i) == 0:
-		print("{} was skipped in the feature construction...".format(tissue_arg))
+		print ("{} was skipped in the feature construction...".format(tissue_arg))
 	elif len(i) > 1: 
 		print("Something weird happened... I got more than 1 tissue")
 
