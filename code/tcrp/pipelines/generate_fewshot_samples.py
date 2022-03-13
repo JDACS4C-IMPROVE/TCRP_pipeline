@@ -74,7 +74,7 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
 
-fewshot_directory = job_directory + 'fewshot_data/' + gene  + '/'
+fewshot_directory ="/data/" + 'fewshot_data/' + gene  + '/'
 
 drug_tissue_list = work_dic + args.drug + '_tissue_cell_line_list.pkl'
 with open(drug_tissue_list, 'rb') as f:
@@ -105,9 +105,10 @@ for trial in range(num_trials):
     test_X, test_y = [np.vstack([mat.cpu() for mat in mats]) for mats in  zip(*unseen_test_loader)]
     
     for i in range(1, K+1): 
-        filename = "/data/few_shot/{}_{}_{}-shot_{}-trial_train".format(args.drug, args.tissue, i, trial)
+        filename = "{}_{}_{}-shot_{}-trial_train".format(args.drug, args.tissue, i, trial)
+        filename = tissue_directory + filename
         np.savez(filename, train_X=train_X[:i], train_y=train_y[:i])
         
-    filename = "/data/few_shot/{}_{}_{}-trial_test".format(args.drug, args.tissue, trial)
+    filename = "{}_{}_{}-trial_test".format(args.drug, args.tissue, trial)
+    filename = tissue_directory + filename
     np.savez(filename, test_X=test_X, test_y=test_y)
-                    

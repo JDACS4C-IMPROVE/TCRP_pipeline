@@ -24,7 +24,7 @@ drug_list_file, job, job_id = args.drug_list_file, args.job, args.job_id
 work_dic = '/data/Pre_training/'
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
-job_directory =  '/code/tcrp/baselines/{}/'.format(args.run_name)
+job_directory =  '/code/tcrp/created_models/'
 
 file_handle = open( drug_list_file )
 
@@ -51,10 +51,10 @@ for line in file_handle:
 	if len(tissue_cell_line) < 15:
 		continue
 	# Assuming fewshot samples already exist...
-	cmd_str = '$python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
+	cmd_str = 'python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 10 --run_name {}'.format(tissue, gene, args.run_name)
 	cmd_list.append(cmd_str)
 	
-	cmd_str = '$python ' + '/code/tcrp/baselines/baseline_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 20' + ' --run_name ' + args.run_name  + fewshot_data_path_str
+	cmd_str = 'python ' + '/code/tcrp/baselines/baseline_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 10' + ' --run_name ' + args.run_name  + fewshot_data_path_str
 	cmd_list.append( cmd_str )						
 
 file_handle.close()
@@ -64,7 +64,7 @@ subcommand_directory = cmd_folder + "subcommands"
 os.system("mkdir -p {}".format(subcommand_directory))
 with open(subcommand_directory + '/' + 'subcommands_baseline_{}{}.sh'.format(job, job_id), 'w') as f:
 	f.write('#!/bin/bash\n')
-	f.writelines("python=/cellar/users/shfong/bin/miniconda3/envs/tcrp/bin/python\n")
+	#f.writelines("python=/cellar/users/shfong/bin/miniconda3/envs/tcrp/bin/python\n")
 	f.writelines('\n'.join(cmd_list) + '\n')
 
 
@@ -85,7 +85,7 @@ file_handle.writelines("#SBATCH --partition=nrnb-compute\n")
 # file_handle.writelines("#SBATCH --gres=gpu:1\n\n")
 
 #file_handle.writelines("python=/cellar/users/samsonfong/bin/miniconda/envs/tcrp/bin/python\n")
-file_handle.writelines("/usr/bin/bash {}/subcommands_baseline_{}{}.sh\n".format(subcommand_directory, job, job_id))
+file_handle.writelines("{}/subcommands_baseline_{}{}.sh\n".format(subcommand_directory, job, job_id))
 
 file_handle.close()
 

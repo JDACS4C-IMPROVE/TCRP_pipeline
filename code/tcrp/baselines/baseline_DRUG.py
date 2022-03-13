@@ -16,7 +16,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from copy import deepcopy
 
 
-# Training settings
+# Training settings	
 parser = argparse.ArgumentParser()
 #work_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/'
 #data_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/tissue_test_data/'
@@ -68,7 +68,7 @@ unseen_train_loader_list = []
 unseen_test_loader_list = []
 
 # testing_path_suffix = data_dic + args.drug + '/' + args.tissue + '/'
-test_data_path = fewshot_data_path + "fewshot_data/" + args.drug + '/' + args.tissue + '/' 
+test_data_path = fewshot_data_path + "/" + args.drug + '/' + args.tissue + '/' 
 
 unseen_train_loader_list, unseen_test_loader_list = [], []
 
@@ -137,7 +137,7 @@ def make_predictions(model, X, y):
 	return out[0,1]
 
 
-base_line_outpath = job_directory + "baseline_performances/" + args.drug + '/' + args.tissue + '/'
+base_line_outpath = "/results/baseline_performances/" + args.drug + '/' + args.tissue + '/'
 os.system("mkdir -p {}".format(base_line_outpath))
 
 models = [
@@ -151,10 +151,10 @@ for name, model, kwargs in models:
 	print("Training...", name) 
 	zero_p, p = train_linear_baseline(model, train_feature, train_label, drug_test_feature, drug_test_label, 
 		unseen_train_loader_list, unseen_test_loader_list, **kwargs)
-
+	print("Done")
 	results["{}-zero".format(name)] = np.array([zero_p])
 	results["{}-fewshot".format(name)] = p
-
+print("here")
 np.savez(
 	base_line_outpath + "baseline_performance", 
 	**results

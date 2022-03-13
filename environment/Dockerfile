@@ -1,4 +1,4 @@
-# hash:sha256:98a06c0b620ad4da009cb7dd15f3fe63932db9f06b2f039fb7af3da810c45fb8
+# hash:sha256:03a1de25bcf0215281a2554dc89aaee62fcd1999e412bb63944db44a1e57713b
 FROM registry.acmecorp-edge.codeocean.com/codeocean/miniconda3:4.7.10-cuda10.1-cudnn7-ubuntu18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -12,12 +12,23 @@ RUN apt-get update \
         python3-wheel=0.30.0-0.2 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /.code-server \
-	&& cd /.code-server \
-	&& curl -L "https://github.com/coder/code-server/releases/download/v4.0.2/code-server-4.0.2-linux-amd64.tar.gz" -o code-server.tar.gz \
-	&& tar -xvf code-server.tar.gz \
-	&& rm code-server.tar.gz \
-	&& ln -s /.code-server/code-server-4.0.2-linux-amd64/bin/code-server  /usr/bin/code-server
+RUN conda install -y \
+        jupyterlab==3.2.9 \
+    && conda clean -ya
+
+RUN pip install -U --no-cache-dir \
+    matplotlib \
+    numpy==1.21.5 \
+    scipy==1.7.3 \
+    sklearn==0.0 \
+    torch==1.11.0
+
+RUN pip3 install -U --no-cache-dir \
+    matplotlib \
+    numpy==1.19.5 \
+    scipy==1.5.4 \
+    sklearn==0.0 \
+    torch==1.10.2
 
 COPY postInstall /
 RUN /postInstall

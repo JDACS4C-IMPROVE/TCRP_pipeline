@@ -53,7 +53,7 @@ priority_chunked = make_chunks(priority, n_gpus)
 
 print("Total number of drugs: {}".format(len(priority) + len(remaining_drugs)))
 
-fewshot_data_path = "/results/output/"
+fewshot_data_path = "/data/fewshot_data"
 print(enumerate(zip(priority_chunked, remaining_drugs_chunked)))
 for i, (a, b) in enumerate(zip(priority_chunked, remaining_drugs_chunked)):
     _drugs = a + b
