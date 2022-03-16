@@ -27,7 +27,7 @@ data_dic = home_dir + '/data/drug_feature/'
 # Training settings
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--tissue', type=str, default='UPPER_AERODIGESTIVE_TRACT', help='Validation tissue, using the rest tissues for training')
+parser.add_argument('--tissue', type=str, default='UPPER_AERODIGESTIVE_TRAC T', help='Validation tissue, using the rest tissues for training')
 parser.add_argument('--drug', type=str, default='AC220', help='Treated drug')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='Disables CUDA training.')
 parser.add_argument('--seed', type=int, default=19, help='Random seed.')
