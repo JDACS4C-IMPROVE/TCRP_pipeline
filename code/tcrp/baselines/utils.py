@@ -108,7 +108,7 @@ def load_data_cell_line(tissue_map, drug, tissue_arg, K, path='/home-nfs/wangshe
 	for tissue, cell_line_list in tissue_map.items():
 
 		path_suffix = path + drug + '/' + tissue + '_' + drug
-		tissue_feature = np.load(path_suffix + '_feature.npy')
+		tissue_feature = np.load(path_suffix + '_feature.npy',allow_pickle=True)
 		tissue_label = np.load(path_suffix + '_label.npy').reshape(-1,1)
 
 		feature_map[ tissue + '_' + drug ] = tissue_feature

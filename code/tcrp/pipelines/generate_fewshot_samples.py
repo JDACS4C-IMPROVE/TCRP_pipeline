@@ -48,8 +48,8 @@ from model.mlp import mlp
 
 # Training settings
 parser = argparse.ArgumentParser()
-work_dic ='/data/Pre_training/'
-data_dic ='/data/Pre_training/drug_feature/'
+work_dic ='/data/merged/'
+data_dic ='/data/merged/drug_feature/'
 ##print(dir_name)
 ##print(__file__)
 parser.add_argument('--tissue', type=str, default='UPPER_AERODIGESTIVE_TRACT', help='Validation tissue, using the rest tissues for training')
@@ -85,6 +85,7 @@ out= load_data_cell_line( drug_tissue_map, args.drug, args.tissue, K, path=data_
 train_feature, train_label, tissue_index_list, drug_test_feature, drug_test_label, _  = out
 feature_dim = train_feature.shape[1]
 
+#tissue_list = work_dic + gene + '_tissue_cell_line_list.pkl'
 tissue_list = work_dic + gene + '_tissue_cell_line_list.pkl'
 with open(tissue_list, 'rb') as f:
     tissue_map = pickle.load(f)

@@ -35,7 +35,7 @@ task_directory = out_directory + '/' + "tasks"
 
 os.system("mkdir -p {}".format(task_directory))
 
-drugs = glob("/data/Pre_training/*.pkl")
+drugs = glob("/data/merged/*.pkl")
 drugs = [drug.split('/')[-1].split('_tissue_cell_line_list.pkl')[0] for drug in drugs]
 
 with open('/code/tcrp/pipelines/priority_drugs') as f: 
@@ -46,7 +46,8 @@ print("Following drugs are missing: ")
 print(missing)
 print(len(missing))
 
-remaining_drugs = list(set(drugs).difference(priority))
+#remaining_drugs = list(set(drugs).difference(priority))
+remaining_drugs = list(set(priority).difference(drugs))
 priority = list(set(priority).difference(missing))
 remaining_drugs_chunked = make_chunks(remaining_drugs, n_gpus)
 priority_chunked = make_chunks(priority, n_gpus)
@@ -56,7 +57,9 @@ print("Total number of drugs: {}".format(len(priority) + len(remaining_drugs)))
 fewshot_data_path = "/data/fewshot_data"
 print(enumerate(zip(priority_chunked, remaining_drugs_chunked)))
 for i, (a, b) in enumerate(zip(priority_chunked, remaining_drugs_chunked)):
-    _drugs = a + b
+#for i in enumerate(zip(priority_chunked)):
+    print("Here")
+    _drugs = a + b 
     drug_input_file = task_directory + '/drugs_input_{}'.format(i)
     with open(drug_input_file, 'w') as f: 
         f.write('\n'.join(_drugs))

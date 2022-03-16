@@ -1,4 +1,4 @@
-# hash:sha256:6770b6129d3eee260920cd41e656f464f37696708ed26fee5575243a268392d8
+# hash:sha256:d06c1878367c7b4698c94115ff6392a8b2e34bea1f074d92f671a6e407a2b8b4
 FROM registry.acmecorp-edge.codeocean.com/codeocean/miniconda3:4.7.10-cuda10.1-cudnn7-ubuntu18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -32,6 +32,13 @@ RUN pip3 install -U --no-cache-dir \
     scipy==1.5.4 \
     sklearn==0.0 \
     torch==1.10.2
+
+RUN mkdir /.code-server \
+	&& cd /.code-server \
+	&& curl -L "https://github.com/coder/code-server/releases/download/v4.0.2/code-server-4.0.2-linux-amd64.tar.gz" -o code-server.tar.gz \
+	&& tar -xvf code-server.tar.gz \
+	&& rm code-server.tar.gz \
+	&& ln -s /.code-server/code-server-4.0.2-linux-amd64/bin/code-server  /usr/bin/code-server
 
 COPY postInstall /
 RUN /postInstall
