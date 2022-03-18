@@ -35,7 +35,7 @@ task_directory = out_directory + '/' + "tasks"
 
 os.system("mkdir -p {}".format(task_directory))
 
-drugs = glob("/data/merged/*.pkl")
+drugs = glob("/data/merged-2/*.pkl")
 drugs = [drug.split('/')[-1].split('_tissue_cell_line_list.pkl')[0] for drug in drugs]
 
 with open('/code/tcrp/pipelines/priority_drugs') as f: 
@@ -46,8 +46,8 @@ print("Following drugs are missing: ")
 print(missing)
 print(len(missing))
 
-#remaining_drugs = list(set(drugs).difference(priority))
-remaining_drugs = list(set(priority).difference(drugs))
+remaining_drugs = list(set(drugs).difference(priority))
+#remaining_drugs = list(set(priority).difference(drugs))
 priority = list(set(priority).difference(missing))
 remaining_drugs_chunked = make_chunks(remaining_drugs, n_gpus)
 priority_chunked = make_chunks(priority, n_gpus)
