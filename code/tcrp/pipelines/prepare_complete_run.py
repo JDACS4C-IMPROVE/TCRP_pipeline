@@ -28,14 +28,14 @@ print(home_dir)
 
 n_gpus = 20
 
-run_mode = "baseline" # "tcrp" or "baseline"
+run_mode = "tcrp" # "tcrp" or "baseline"
 run_name = "210803_drug-baseline-models"
-out_directory = '/results/' + run_name
+out_directory = '/code/' + run_name
 task_directory = out_directory + '/' + "tasks"
 
 os.system("mkdir -p {}".format(task_directory))
 
-drugs = glob("/data/merged-2/*.pkl")
+drugs = glob("/data/merged/*.pkl")
 drugs = [drug.split('/')[-1].split('_tissue_cell_line_list.pkl')[0] for drug in drugs]
 
 with open('/code/tcrp/pipelines/priority_drugs') as f: 

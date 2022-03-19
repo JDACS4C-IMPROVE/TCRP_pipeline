@@ -19,7 +19,7 @@ drug_list_file, job, job_id = args.drug_list_file, args.job, args.job_id
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
-work_dic = '/data/Pre_training/'
+work_dic = '/data/merged/'
 job_directory = '/results/{}/'.format(args.run_name)
 
 file_handle = open( drug_list_file )
@@ -39,38 +39,38 @@ for line in file_handle:
 		tissue_map = pickle.load(f)
 
 	for tissue, tissue_cell_line in tissue_map.items():
-	
-		if len(tissue_cell_line) < 15:
-			continue
+		if tissue == "PDTC":
+			if len(tissue_cell_line) < 15:
+				continue
 
-		cmd_str = '$python ' + '/root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
-		cmd_list.append(cmd_str)
-		
-		log_folder = job_directory + 'run-logs/{}/{}/'.format(gene, tissue)
-		os.system("mkdir -p {}".format(log_folder))
+			cmd_str = '$python ' + '/root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
+			cmd_list.append(cmd_str)
+			
+			log_folder = job_directory + 'run-logs/{}/{}/'.format(gene, tissue)
+			os.system("mkdir -p {}".format(log_folder))
 
-		for meta_lr in ['0.1', '0.01', '0.001']:
-			for inner_lr in ['0.1', '0.01', '0.001']:
-				for layer in ['1', '2']:
-					for tissue_num in ['6', '12', '20']:
+			for meta_lr in ['0.1', '0.01', '0.001']:
+				for inner_lr in ['0.1', '0.01', '0.001']:
+					for layer in ['1', '2']:
+						for tissue_num in ['6', '12', '20']:
 
-						log_file = log_folder + tissue + '_' + gene + '_' + meta_lr + '_' + inner_lr + '_' + layer + '_' + tissue_num + '.log'
-						
-						if os.path.exists( log_file ):
+							log_file = log_folder + tissue + '_' + gene + '_' + meta_lr + '_' + inner_lr + '_' + layer + '_' + tissue_num + '.log'
 							
-							normal_finish = 0
-							file_handle = open( log_file, 'r')
-							for line in file_handle:
-								if 'Best loss' in line:
-									normal_finish = 1
-									break
-							if normal_finish == 1:
-								continue
+							if os.path.exists( log_file ):
+								
+								normal_finish = 0
+								file_handle = open( log_file, 'r')
+								for line in file_handle:
+									if 'Best loss' in line:
+										normal_finish = 1
+										break
+								if normal_finish == 1:
+									continue
 
-						cmd_str = '$python ' + home_dir + '/tcrp/model/' + 'MAML_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 20' + ' --tissue_num ' + tissue_num + ' --meta_batch_size 10 --meta_lr ' + meta_lr + ' --inner_lr ' + inner_lr + ' --layer ' + layer + ' --run_name ' + args.run_name + ' > ' + log_file
-						cmd_list.append( cmd_str )						
+							cmd_str = '$python ' + home_dir + '/tcrp/model/' + 'MAML_DRUG.py --tissue ' + tissue + ' --drug ' + gene + ' --K 10 --num_trials 20' + ' --tissue_num ' + tissue_num + ' --meta_batch_size 10 --meta_lr ' + meta_lr + ' --inner_lr ' + inner_lr + ' --layer ' + layer + ' --run_name ' + args.run_name + ' > ' + log_file
+							cmd_list.append( cmd_str )						
 
-				cmd_list.append('')
+					cmd_list.append('')
 
 file_handle.close()
 

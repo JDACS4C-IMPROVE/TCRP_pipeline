@@ -21,8 +21,8 @@ from mlp import mlp
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
-work_dic = home_dir + '/data/cell_line_lists/'
-data_dic = home_dir + '/data/drug_feature/'
+work_dic = '/data/merged/'
+data_dic = '/data/merged/drug_feature/'
 
 # Training settings
 parser = argparse.ArgumentParser()
@@ -180,7 +180,7 @@ unseen_train_loader_list = []
 unseen_test_loader_list = []
 
 # testing_path_suffix = data_dic + args.drug + '/' + args.tissue + '/'
-test_data_path = job_directory + "fewshot_data/" + args.drug + '/' + args.tissue + '/' 
+test_data_path = "/data/" + "fewshot_data/" + args.drug + '/' + args.tissue + '/' 
 
 unseen_train_loader_list, unseen_test_loader_list = [], []
 
@@ -190,7 +190,7 @@ for trial in range(num_trials):
 	#unseen_train_loader, unseen_test_loader = get_unseen_data_loader(drug_test_feature, drug_test_label, K, args.inner_batch_size)
 	unseen_train, unseen_test = [], []
 
-	for k in range(1,K+1):
+	for k in range(1,K):
 		# # Sample a few shot learning task. Here we use k training, and use the rest for testing. 
 		# unseen_train_loader, unseen_test_loader = get_unseen_data_loader(drug_test_feature, drug_test_label, K, args.inner_batch_size)
 		# print(len(unseen_train_loader))
@@ -202,12 +202,11 @@ for trial in range(num_trials):
 
 		# train_index_file = testing_path_suffix + args.tissue + '_' + args.drug + '_train_index_' + str(trial) + '_' + str(k) + '.npy'
 		# test_index_file = testing_path_suffix + args.tissue + '_' + args.drug + '_test_index_' + str(trial) + '_' + str(k) + '.npy'
-
+		print(k)
 		train_data = np.load(test_data_path + '{}_{}_{}-shot_{}-trial_train.npz'.format(args.drug, args.tissue, k, trial))
 		train_X = torch.tensor(train_data['train_X']).cuda()
 		train_y = torch.tensor(train_data['train_y']).cuda()
 		unseen_train_loader = [(train_X, train_y)]
-		
 		test_data = np.load(test_data_path + '{}_{}_{}-trial_test.npz'.format(args.drug, args.tissue, trial))
 		test_X = torch.tensor(test_data['test_X']).cuda()
 		test_y = torch.tensor(test_data['test_y']).cuda()
@@ -232,13 +231,13 @@ predict_folder = job_directory + '/predictions/' + args.drug + '/' + args.tissue
 mkdir_cmd = 'mkdir -p ' + predict_folder
 os.system(mkdir_cmd)
 
-print "Number of updates: ", args.num_updates
+print("Number of updates: ", args.num_updates)
 
 for epoch in range( args.num_updates ):
-	print "epoch: ", epoch
+	print("epoch: ", epoch)
 
 	zero_test_loss, zero_test_corr, test_prediction, test_true_label = zero_shot_test(zero_test_data_list)
-	print '0 Few shot', epoch, 'meta training:', '-1', '-1', zero_test_loss, zero_test_corr
+	print('0 Few shot', epoch, 'meta training:', '-1', '-1', zero_test_loss, zero_test_corr)
 
 	epoch_folder = predict_folder + 'epochs_' + str(epoch) + '/'
 	mkdir_cmd = 'mkdir -p ' + epoch_folder
@@ -267,7 +266,7 @@ for epoch in range( args.num_updates ):
 		train_loss[epoch][k-1], train_corr[epoch][k-1] = tissue_train_loss.mean(), tissue_train_corr.mean()
 		test_loss[epoch][k-1], test_corr[epoch][k-1] = tissue_test_loss.mean(), tissue_test_corr.mean()
 	
-		print k, 'Few shot', epoch, 'meta training:', train_loss[epoch][k-1], train_corr[epoch][k-1], test_loss[epoch][k-1], test_corr[epoch][k-1]
+		print(k, 'Few shot', epoch, 'meta training:', train_loss[epoch][k-1], train_corr[epoch][k-1], test_loss[epoch][k-1], test_corr[epoch][k-1])
 
 	# Collect a meta batch update
 	grads = []
@@ -288,19 +287,19 @@ for epoch in range( args.num_updates ):
 		meta_train_loss[i], meta_train_corr[i], meta_val_loss[i], meta_val_corr[i] = metrics
 
 	if meta_val_loss.mean() < best_loss:
-	   	best_loss = meta_val_loss.mean()
+		best_loss = meta_val_loss.mean()
 		best_epoch = epoch
 		bad_counter = 0
 	else:
 		bad_counter += 1
 
 	if bad_counter == args.patience:
-		print "Ran out of patience. Breaking out..."
+		print("Ran out of patience. Breaking out...")
 		break
 
-	print 'Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch
+	print('Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch)
 	# Perform the meta update
 	meta_update( observed_test_loader, grads )
 
-print 'Best loss meta training:', test_corr[best_epoch]
+print('Best loss meta training:', test_corr[best_epoch])
 #print 'Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch] 
