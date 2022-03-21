@@ -118,7 +118,7 @@ def unseen_tissue_learn(unseen_train_loader, unseen_test_loader):
 	#unseen_train_loader, unseen_test_loader = get_unseen_data_loader(test_feature, test_label, K, args.inner_batch_size)
 
 	for i in range(args.num_inner_updates):
-		in_, target = unseen_train_loader.__iter__().next()
+		in_, target = unseen_train_loader.__iter__().__next__()
 		loss, _  = forward_pass( unseen_tissue_model, in_, target )
 		unseen_opt.zero_grad()
 		loss.backward()
@@ -133,7 +133,7 @@ def unseen_tissue_learn(unseen_train_loader, unseen_test_loader):
 def meta_update(test_loader, ls):
 
 	#print 'Meta update'
-	in_, target = test_loader.__iter__().next()
+	in_, target = test_loader.__iter__().__next__()
 	
 	# We use a dummy forward / backward pass to get the correct grads into self.net
 	loss, out = forward_pass(observed_tissue_model, in_, target)
@@ -202,7 +202,6 @@ for trial in range(num_trials):
 
 		# train_index_file = testing_path_suffix + args.tissue + '_' + args.drug + '_train_index_' + str(trial) + '_' + str(k) + '.npy'
 		# test_index_file = testing_path_suffix + args.tissue + '_' + args.drug + '_test_index_' + str(trial) + '_' + str(k) + '.npy'
-		print(k)
 		train_data = np.load(test_data_path + '{}_{}_{}-shot_{}-trial_train.npz'.format(args.drug, args.tissue, k, trial))
 		train_X = torch.tensor(train_data['train_X']).cuda()
 		train_y = torch.tensor(train_data['train_y']).cuda()
@@ -227,7 +226,7 @@ for batch_feature, batch_label in zero_test_loader:
 	zero_test_data_list.append((batch_feature.cuda(), batch_label.cuda()))
 
 # predict_folder = work_dic + 'MAML_prediction/' + args.drug + '/' + args.tissue + '/'
-predict_folder = job_directory + '/predictions/' + args.drug + '/' + args.tissue + '/' + hyperparam_str + '/'
+predict_folder ='/results/predictions/' + args.drug + '/' + args.tissue + '/' + hyperparam_str + '/'
 mkdir_cmd = 'mkdir -p ' + predict_folder
 os.system(mkdir_cmd)
 
@@ -249,7 +248,7 @@ for epoch in range( args.num_updates ):
 	zero_true_file = epoch_folder + 'zero_shot_true.npy'
 	np.save(zero_true_file, test_true_label.cpu())
 
-	for k in range(1, K+1):
+	for k in range(1, K):
 
 		tissue_train_loss, tissue_test_loss, tissue_train_corr, tissue_test_corr, = np.zeros((num_trials,)), np.zeros((num_trials,)), np.zeros((num_trials,)), np.zeros((num_trials,))
 
@@ -300,6 +299,6 @@ for epoch in range( args.num_updates ):
 	print('Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch)
 	# Perform the meta update
 	meta_update( observed_test_loader, grads )
-
+print(test_corr)
 print('Best loss meta training:', test_corr[best_epoch])
 #print 'Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch] 
