@@ -3,9 +3,7 @@ set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
 #bash /code/tcrp/created_models/PDTC_commands.sh 
-#bash /code/tcrp/created_models/MAML_commands.sh
-python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug AZD7762 --K 10 --num_trials 10 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.1 --layer 1 --run_name 210803_drug-baseline-models > /results/PDTC_AZD7762_0.1_0.1_1_6.log
-python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug AZD7762 --K 10 --num_trials 10 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.1 --layer 1 --run_name 210803_drug-baseline-models > /results/PDTC_AZD7762_0.1_0.1_1_6.log
+bash /code/tcrp/created_models/MAML_commands.sh
 mkdir /results/run_logs
 mv /results/PDTC* /results/run_logs
 # The previous version of this file was commented-out and follows below:
