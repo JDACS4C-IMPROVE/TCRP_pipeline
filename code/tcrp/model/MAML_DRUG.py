@@ -1,6 +1,7 @@
 import time
 import argparse
 import numpy as np
+from array import array 
 import random
 import torch
 import torch.nn.functional as F
@@ -37,7 +38,7 @@ parser.add_argument('--meta_batch_size', type=int, default=32, help='Meta-learni
 parser.add_argument('--inner_batch_size', type=int, default=10, help='Batch size for each individual learning job')
 parser.add_argument('--inner_lr', type=float, default=0.001, help='Learning rate for ')
 parser.add_argument('--test_inner_lr', type=float, default=0.001, help='Learning rate for ')
-parser.add_argument('--num_updates', type=int, default=1000, help='Number of training epochs')
+parser.add_argument('--num_updates', type=int, default=10, help='Number of training epochs')
 parser.add_argument('--num_inner_updates', type=int, default=1, help='Initial learning rate')
 parser.add_argument('--num_out_updates', type=int, default=20, help='Final learning rate')
 parser.add_argument('--num_trials', type=int, default=10, help='Number of trials for unseen tissue')
@@ -181,7 +182,6 @@ unseen_test_loader_list = []
 
 # testing_path_suffix = data_dic + args.drug + '/' + args.tissue + '/'
 test_data_path = "/data/" + "fewshot_data/" + args.drug + '/' + args.tissue + '/' 
-
 unseen_train_loader_list, unseen_test_loader_list = [], []
 
 for trial in range(num_trials):
@@ -254,6 +254,7 @@ for epoch in range( args.num_updates ):
 
 		for i in range( num_trials ):	
 		# Evaluate on unseen test tasks
+		#tissue_test_corr is the one that I want to save 
 			tissue_train_loss[i], tissue_train_corr[i], tissue_test_loss[i], tissue_test_corr[i], test_prediction, test_true_label = unseen_tissue_learn( unseen_train_loader_list[i][k-1], unseen_test_loader_list[i][k-1] )
 			
 			k_shot_predict_file = epoch_folder + str(k) + '_' + str(i) + '_shot_predict.npy'
@@ -299,6 +300,22 @@ for epoch in range( args.num_updates ):
 	print('Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch)
 	# Perform the meta update
 	meta_update( observed_test_loader, grads )
-print(test_corr)
 print('Best loss meta training:', test_corr[best_epoch])
+
+base_line_outpath = "/results/TCRP_performances/" + args.drug + '/' + args.tissue + '/'
+os.system("mkdir -p {}".format(base_line_outpath))
+new_test_corr = test_corr[test_corr != 0]
+new_zero_test_corr = zero_test_corr.data.cpu().numpy()
+results = {}
+results["TCRP-zero"] = new_zero_test_corr
+print("here")
+print(test_corr[best_epoch].shape)
+results["TCRP-fewshot"] = test_corr[best_epoch]
+print(results["TCRP-fewshot"])
+np.savez(
+	base_line_outpath + "TCRP_performance", 
+	**results
+)
 #print 'Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch] 
+
+

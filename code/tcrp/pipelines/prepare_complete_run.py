@@ -28,10 +28,13 @@ print(home_dir)
 
 n_gpus = 20
 
-run_mode = "tcrp" # "tcrp" or "baseline"
+run_mode = "baseline" # "tcrp" or "baseline"
 run_name = "210803_drug-baseline-models"
-out_directory = '/code/' + run_name
-task_directory = out_directory + '/' + "tasks"
+out_directory = '/code/tcrp/created_models/'
+if run_mode == 'tcrp':
+    task_directory = out_directory + "MAML"
+else:
+    task_directory = out_directory + "baseline"
 
 os.system("mkdir -p {}".format(task_directory))
 
