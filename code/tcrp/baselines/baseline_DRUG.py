@@ -159,7 +159,40 @@ def train_linear_baseline(Regressor, train_X, train_y, zero_train, zero_test,
 	performances = np.vstack(performances)
 
 	return zero_p, performances
-def torch_train(epoch,train_X,train_y,test_X,test_y):
+def torch_train(model,epoch,test_X,test_y):
+	for i in range(epoch):
+		tr_loss = 0
+		# getting the training set
+		# getting the validation set
+		x_val, y_val = Variable(test_X), Variable(test_y)
+		# converting the data into GPU format
+		if torch.cuda.is_available():
+			x_val = x_val.cuda()
+			y_val = y_val.cuda()
+
+		# clearing the Gradients of the model parameters
+		optimizer.zero_grad()
+
+		# prediction for training and validation set
+		predictions = model(x_val)
+
+		# computing the training and validation loss
+		loss_val = criterion(output_val, y_val)
+		val_losses.append(loss_val)
+
+		# computing the updated weights of all the model parameters
+		loss_train.backward()
+		optimizer.step()
+		tr_loss = loss_train.item()
+		# if epoch%2 == 0:
+		# 	# printing the validation loss
+		# 	print('Epoch : ',epoch+1, '\t', 'loss :', loss_val)
+	return np.corrcoef(np.vstack([predictions.ravel(), test_y.ravel()]))
+def train_cnn(train_X, train_y, zero_train, zero_test, 
+	unseen_train, unseen_test, epoch=20,**kwargs): 
+	# train_X  = torch.from_numpy(train_x)
+	# train_y = train_y.astype(int);
+	# train_y = torch.from_numpy(train_y)
 	model = Net()
 	# defining the optimizer
 	optimizer = Adam(model.parameters(), lr=0.07)
@@ -170,47 +203,9 @@ def torch_train(epoch,train_X,train_y,test_X,test_y):
 		model = model.cuda()
 		criterion = criterion.cuda()
 	model.train()
-	tr_loss = 0
-    # getting the training set
-	x_train, y_train = Variable(train_x), Variable(train_y)
-    # getting the validation set
-	x_val, y_val = Variable(test_X), Variable(test_y)
-	# converting the data into GPU format
-	if torch.cuda.is_available():
-		x_train = x_train.cuda()
-		y_train = y_train.cuda()
-		x_val = x_val.cuda()
-		y_val = y_val.cuda()
-
-	# clearing the Gradients of the model parameters
-	optimizer.zero_grad()
-
-	# prediction for training and validation set
-	output_train = model(x_train)
-	predictions = model(x_val)
-
-	# computing the training and validation loss
-	loss_train = criterion(output_train, y_train)
-	loss_val = criterion(output_val, y_val)
-	train_losses.append(loss_train)
-	val_losses.append(loss_val)
-
-	# computing the updated weights of all the model parameters
-	loss_train.backward()
-	optimizer.step()
-	tr_loss = loss_train.item()
-	if epoch%2 == 0:
-		# printing the validation loss
-		print('Epoch : ',epoch+1, '\t', 'loss :', loss_val)
-	return np.corrcoef(np.vstack([predictions.ravel(), test_y.ravel()]))
-def train_cnn(model, train_X, train_y, zero_train, zero_test, 
-	unseen_train, unseen_test, epoch=20 **kwargs): 
-	# train_X  = torch.from_numpy(train_x)
-	# train_y = train_y.astype(int);
-	# train_y = torch.from_numpy(train_y)
 	for i in range(epoch):
-		torch_train(epoch)
-	#zero_p = make_predictions(model, zero_train, zero_test)
+		item = torch_train(model,epoch,zero_train,zero_test)
+	zero_p = torch_train(model,epoch,zero_train,zero_test)
 	performances = []
 
 	for nt in range(num_trials): 
@@ -228,12 +223,10 @@ def train_cnn(model, train_X, train_y, zero_train, zero_test,
 			# model = Regressor(**kwargs)
 			# model.fit(X, y.ravel())
 			# out = make_predictions(model, fs_test_X, fs_test_y)
-			torch_train
+			out = torch_train(model,fs_test_X,fs_test_y)
 			inner_p.append(out)
 		performances.append(inner_p)
-
 	performances = np.vstack(performances)
-
 	return zero_p, performances
 
 def make_predictions(model, X, y): 
@@ -250,7 +243,6 @@ models = [
 	("linear", LinearRegression, {}), 
 	("KNN", KNeighborsRegressor, {}), 
 	("RF", RandomForestRegressor, {'n_estimators': 100, 'n_jobs': -1})
-	("CNN",	Net,{})
 ]
 
 results = {}
@@ -262,6 +254,7 @@ for name, model, kwargs in models:
 	results["{}-zero".format(name)] = np.array([zero_p])
 	results["{}-fewshot".format(name)] = p
 print("here")
+zero_cnn,cnn_out = train_cnn(train_feature,train_label,drug_test_feature,drug_test_label,unseen_train_loader_list,unseen_test_loader_list)
 np.savez(
 	base_line_outpath + "baseline_performance", 
 	**results

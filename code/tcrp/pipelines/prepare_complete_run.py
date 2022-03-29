@@ -62,7 +62,8 @@ print(enumerate(zip(priority_chunked, remaining_drugs_chunked)))
 for i, (a, b) in enumerate(zip(priority_chunked, remaining_drugs_chunked)):
 #for i in enumerate(zip(priority_chunked)):
     print("Here")
-    _drugs = a + b 
+    #_drugs = a + b 
+    _drugs = a
     drug_input_file = task_directory + '/drugs_input_{}'.format(i)
     with open(drug_input_file, 'w') as f: 
         f.write('\n'.join(_drugs))

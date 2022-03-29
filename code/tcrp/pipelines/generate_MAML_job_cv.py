@@ -40,8 +40,8 @@ for line in file_handle:
 
 	for tissue, tissue_cell_line in tissue_map.items():
 		if tissue == "PDTC":
-			if len(tissue_cell_line) < 15:
-				continue
+			# if len(tissue_cell_line) < 15:
+			# 	continue
 
 			cmd_str = '$python ' + '/root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
 			cmd_list.append(cmd_str)
