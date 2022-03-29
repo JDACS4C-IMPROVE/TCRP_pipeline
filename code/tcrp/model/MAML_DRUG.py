@@ -313,10 +313,10 @@ print(test_corr[best_epoch].shape)
 results["TCRP-fewshot"] = test_corr[best_epoch]
 print(results["TCRP-fewshot"])
 np.savez(
-	base_line_outpath + "TCRP_performance", 
+	base_line_outpath + "TCRP_performance"+"_"+args.meta_lr+"_"args.inner_lr, 
 	**results
 )
-print('Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch])
+print('Best corr meta training:', test_corr[best_epoch])
 print("zero",zero_test_corr)
 
 
