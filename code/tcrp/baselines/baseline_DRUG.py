@@ -14,7 +14,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from copy import deepcopy
-
+import torch
+from torch.autograd import Variable
+from torch.nn import Linear, ReLU, CrossEntropyLoss, Sequential, Conv2d, MaxPool2d, Module, Softmax, BatchNorm2d, Dropout
+from torch.optim import Adam, SGD
 
 # Training settings	
 parser = argparse.ArgumentParser()
@@ -37,6 +40,34 @@ parser.add_argument('--log_folder', type=str, default=work_dic+'Log/', help='Log
 parser.add_argument('--tissue_num', type=int, default=13, help='Tissue number evolved in the inner update')
 parser.add_argument('--run_name', type=str, default='run', help='Run name')
 parser.add_argument('--fewshot_data_path', type=str, default=None, help='Path to fewshot data')
+
+class Net(Module):   
+    def __init__(self):
+        super(Net, self).__init__()
+
+        self.cnn_layers = Sequential(
+            # Defining a 2D convolution layer
+            Conv2d(1, 4, kernel_size=3, stride=1, padding=1),
+            BatchNorm2d(4),
+            ReLU(inplace=True),
+            MaxPool2d(kernel_size=2, stride=2),
+            # Defining another 2D convolution layer
+            Conv2d(4, 4, kernel_size=3, stride=1, padding=1),
+            BatchNorm2d(4),
+            ReLU(inplace=True),
+            MaxPool2d(kernel_size=2, stride=2),
+        )
+
+        self.linear_layers = Sequential(
+            Linear(4 * 7 * 7, 10)
+        )
+
+    # Defining the forward pass    
+    def forward(self, x):
+        x = self.cnn_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.linear_layers(x)
+        return x
 
 args = parser.parse_args()
 
@@ -128,7 +159,82 @@ def train_linear_baseline(Regressor, train_X, train_y, zero_train, zero_test,
 	performances = np.vstack(performances)
 
 	return zero_p, performances
+def torch_train(epoch,train_X,train_y,test_X,test_y):
+	model = Net()
+	# defining the optimizer
+	optimizer = Adam(model.parameters(), lr=0.07)
+	# defining the loss function
+	criterion = CrossEntropyLoss()
+	# checking if GPU is available
+	if torch.cuda.is_available():
+		model = model.cuda()
+		criterion = criterion.cuda()
+	model.train()
+	tr_loss = 0
+    # getting the training set
+	x_train, y_train = Variable(train_x), Variable(train_y)
+    # getting the validation set
+	x_val, y_val = Variable(test_X), Variable(test_y)
+	# converting the data into GPU format
+	if torch.cuda.is_available():
+		x_train = x_train.cuda()
+		y_train = y_train.cuda()
+		x_val = x_val.cuda()
+		y_val = y_val.cuda()
 
+	# clearing the Gradients of the model parameters
+	optimizer.zero_grad()
+
+	# prediction for training and validation set
+	output_train = model(x_train)
+	predictions = model(x_val)
+
+	# computing the training and validation loss
+	loss_train = criterion(output_train, y_train)
+	loss_val = criterion(output_val, y_val)
+	train_losses.append(loss_train)
+	val_losses.append(loss_val)
+
+	# computing the updated weights of all the model parameters
+	loss_train.backward()
+	optimizer.step()
+	tr_loss = loss_train.item()
+	if epoch%2 == 0:
+		# printing the validation loss
+		print('Epoch : ',epoch+1, '\t', 'loss :', loss_val)
+	return np.corrcoef(np.vstack([predictions.ravel(), test_y.ravel()]))
+def train_cnn(model, train_X, train_y, zero_train, zero_test, 
+	unseen_train, unseen_test, epoch=20 **kwargs): 
+	# train_X  = torch.from_numpy(train_x)
+	# train_y = train_y.astype(int);
+	# train_y = torch.from_numpy(train_y)
+	for i in range(epoch):
+		torch_train(epoch)
+	#zero_p = make_predictions(model, zero_train, zero_test)
+	performances = []
+
+	for nt in range(num_trials): 
+		inner_p = []
+		for k in range(K):
+			tmp1 = unseen_train[nt][k]
+			tmp2 = unseen_test[nt][k]
+
+			fs_train_X, fs_train_y = tmp1[0]
+			fs_test_X, fs_test_y = tmp2[0]
+
+			X = np.vstack([fs_train_X, train_X])
+			y = np.vstack([fs_train_y, train_y])
+
+			# model = Regressor(**kwargs)
+			# model.fit(X, y.ravel())
+			# out = make_predictions(model, fs_test_X, fs_test_y)
+			torch_train
+			inner_p.append(out)
+		performances.append(inner_p)
+
+	performances = np.vstack(performances)
+
+	return zero_p, performances
 
 def make_predictions(model, X, y): 
 	predictions = model.predict(X)
@@ -144,6 +250,7 @@ models = [
 	("linear", LinearRegression, {}), 
 	("KNN", KNeighborsRegressor, {}), 
 	("RF", RandomForestRegressor, {'n_estimators': 100, 'n_jobs': -1})
+	("CNN",	Net,{})
 ]
 
 results = {}
