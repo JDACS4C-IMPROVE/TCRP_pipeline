@@ -22,8 +22,8 @@ from mlp import mlp
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
-work_dic = '/data/merged/'
-data_dic = '/data/merged/drug_feature/'
+work_dic = '/data/MERGED_TCRP'
+data_dic = '/data/MERGED_TCRP/drug_feature/'
 
 # Training settings
 parser = argparse.ArgumentParser()

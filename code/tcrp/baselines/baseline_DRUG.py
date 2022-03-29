@@ -26,9 +26,9 @@ parser = argparse.ArgumentParser()
 #work_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/'
 #data_dic = '/share/data/jinbodata/siqi/Cancer_Drug_Xenograft/tissue_test_data/'
 #work_dic = '/cellar/users/samsonfong/Projects/tcrp-v2/from-ma/cell_line_lists/'
-work_dic = '/data/merged/'
+work_dic = '/data/MERGED_TCRP/'
 #data_dic = '/cellar/users/samsonfong/Projects/tcrp-v2/from-ma/drug_feature/'
-data_dic = '/data/merged/drug_feature/'
+data_dic = '/data/MERGED_TCRP/drug_feature/'
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 
