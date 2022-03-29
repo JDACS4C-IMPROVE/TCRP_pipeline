@@ -74,7 +74,7 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
 
-fewshot_directory ="/data/" + 'fewshot_data/' + gene  + '/'
+fewshot_directory ="/results/" + 'fewshot_data/' + gene  + '/'
 
 drug_tissue_list = work_dic + args.drug + '_tissue_cell_line_list.pkl'
 with open(drug_tissue_list, 'rb') as f:
