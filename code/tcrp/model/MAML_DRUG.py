@@ -316,6 +316,7 @@ np.savez(
 	base_line_outpath + "TCRP_performance", 
 	**results
 )
-#print 'Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch] 
+print('Best loss meta training:', train_loss[best_epoch], train_corr[best_epoch], test_loss[best_epoch], test_corr[best_epoch])
+print("zero",zero_test_corr)
 
 

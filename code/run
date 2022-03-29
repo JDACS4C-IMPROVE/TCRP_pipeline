@@ -2,7 +2,7 @@
 set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-#bash /code/tcrp/created_models/PDTC_commands.sh 
+bash /code/tcrp/created_models/PDTC_commands.sh 
 bash /code/tcrp/created_models/MAML_commands.sh
 mkdir /results/run_logs
 mv /results/PDTC* /results/run_logs
