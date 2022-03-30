@@ -1,16 +1,18 @@
-sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs0.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs1.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs2.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs3.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs4.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs5.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs6.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs7.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs8.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs9.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs10.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs11.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs12.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs13.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs14.sh
-# sh /code/tcrp/created_models/MAML_cmd/subcommands/subcommands_MAML_drugs15.sh
+set -exv
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.001 --layer 1 --hidden 20 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Sorafenib --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.001 --layer 1 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug CHIR-99021 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.001 --layer 2 --hidden 15 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug BMS-754807 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.001 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug JQ1 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.001 --layer 1 --hidden 10 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug MK-2206 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.01 --layer 2 --hidden 15 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Embelin --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.001 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Obatoclax_Mesylate --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.01 --inner_lr 0.001 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug GSK269962A --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.001 --layer 1 --hidden 20 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug AZD7762 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.01 --layer 1 --hidden 20 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Camptothecin --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.001 --layer 2 --hidden 20 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug BI-2536 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.1 --layer 1 --hidden 20 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Bosutinib --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.01 --inner_lr 0.01 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug Gefitinib --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.01 --layer 2 --hidden 10 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug TW_37 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.01 --inner_lr 0.001 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug RO-3306 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.001 --layer 2 --hidden 10 --run_name 210803_drug-baseline-models
+python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug AZ628 --K 10 --num_trials 20 --num_updates 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.001 --inner_lr 0.01 --layer 2 --hidden 5 --run_name 210803_drug-baseline-models

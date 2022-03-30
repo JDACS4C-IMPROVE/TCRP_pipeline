@@ -42,7 +42,9 @@ parser.add_argument('--log_folder', type=str, default=work_dic+'Log/', help='Log
 parser.add_argument('--tissue_num', type=int, default=13, help='Tissue number evolved in the inner update')
 parser.add_argument('--run_name', type=str, default='run', help='Run name')
 parser.add_argument('--fewshot_data_path', type=str, default=None, help='Path to fewshot data')
-
+parser.add_argument('--layers',type=int,default=1)
+parser.add_argument('--lr',type=float,default=0.001)
+parser.add_argument('--hidden',type=int,default=20)
 class mlp(nn.Module):
 
 	def __init__(self, feature_dim, layer, hidden):
@@ -262,9 +264,11 @@ def train_cnn(train_X, train_y, zero_train, zero_test,
 	# train_X  = torch.from_numpy(train_x)
 	# train_y = train_y.astype(int);
 	# train_y = torch.from_numpy(train_y)
-	model = mlp(zero_train.shape[1],1,10)
+
+	#change parameters here
+	model = mlp(zero_train.shape[1],args.layers,args.hidden)
 	# defining the optimizer
-	optimizer = Adam(model.parameters(), lr=0.07)
+	optimizer = Adam(model.parameters(), lr=args.lr)
 	# defining the loss function
 	criterion = CrossEntropyLoss()
 	# checking if GPU is available
@@ -320,13 +324,20 @@ zero_cnn,cnn_out = train_cnn(train_feature,train_label,drug_test_feature,drug_te
 results = {}
 results["{}-zero".format("Neural Network")] = np.array([zero_cnn])
 results["{}-fewshot".format("Neural Network")] = cnn_out
+cnn_mean = np.mean(cnn_out)
 for name, model, kwargs in models:
 	print("Training...", name) 
 	zero_p, p = train_linear_baseline(model, train_feature, train_label, drug_test_feature, drug_test_label, 
 		unseen_train_loader_list, unseen_test_loader_list, **kwargs)
 	print("Done")
 	results["{}-zero".format(name)] = np.array([zero_p])
-	results["{}-fewshot".format(name)] = p
+	results["{}-fewshot".format(name)] = np.nan_to_num(p)
+mean_dict = {}
+for key,value in results.items():
+	mean_dict[key] = np.mean(value)
+median_dict = {}
+for key,value in results.items():
+	median_dict[key] = np.median(value)
 np.savez(
 	base_line_outpath + "baseline_performance", 
 	**results

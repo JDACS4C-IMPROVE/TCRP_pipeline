@@ -22,9 +22,10 @@ from mlp import mlp
 filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
-work_dic = '/data/MERGED_TCRP'
+work_dic = '/data/MERGED_TCRP/'
 data_dic = '/data/MERGED_TCRP/drug_feature/'
-
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 # Training settings
 parser = argparse.ArgumentParser()
 
@@ -190,7 +191,7 @@ for trial in range(num_trials):
 	#unseen_train_loader, unseen_test_loader = get_unseen_data_loader(drug_test_feature, drug_test_label, K, args.inner_batch_size)
 	unseen_train, unseen_test = [], []
 
-	for k in range(1,K):
+	for k in range(1,K+1):
 		# # Sample a few shot learning task. Here we use k training, and use the rest for testing. 
 		# unseen_train_loader, unseen_test_loader = get_unseen_data_loader(drug_test_feature, drug_test_label, K, args.inner_batch_size)
 		# print(len(unseen_train_loader))
@@ -230,13 +231,13 @@ predict_folder ='/results/predictions/' + args.drug + '/' + args.tissue + '/' + 
 mkdir_cmd = 'mkdir -p ' + predict_folder
 os.system(mkdir_cmd)
 
-print("Number of updates: ", args.num_updates)
+#print("Number of updates: ", args.num_updates)
 
 for epoch in range( args.num_updates ):
-	print("epoch: ", epoch)
+	#print("epoch: ", epoch)
 
 	zero_test_loss, zero_test_corr, test_prediction, test_true_label = zero_shot_test(zero_test_data_list)
-	print('0 Few shot', epoch, 'meta training:', '-1', '-1', zero_test_loss, zero_test_corr)
+	#print('0 Few shot', epoch, 'meta training:', '-1', '-1', zero_test_loss, zero_test_corr)
 
 	epoch_folder = predict_folder + 'epochs_' + str(epoch) + '/'
 	mkdir_cmd = 'mkdir -p ' + epoch_folder
@@ -248,7 +249,7 @@ for epoch in range( args.num_updates ):
 	zero_true_file = epoch_folder + 'zero_shot_true.npy'
 	np.save(zero_true_file, test_true_label.cpu())
 
-	for k in range(1, K):
+	for k in range(1, K+1):
 
 		tissue_train_loss, tissue_test_loss, tissue_train_corr, tissue_test_corr, = np.zeros((num_trials,)), np.zeros((num_trials,)), np.zeros((num_trials,)), np.zeros((num_trials,))
 
@@ -266,7 +267,7 @@ for epoch in range( args.num_updates ):
 		train_loss[epoch][k-1], train_corr[epoch][k-1] = tissue_train_loss.mean(), tissue_train_corr.mean()
 		test_loss[epoch][k-1], test_corr[epoch][k-1] = tissue_test_loss.mean(), tissue_test_corr.mean()
 	
-		print(k, 'Few shot', epoch, 'meta training:', train_loss[epoch][k-1], train_corr[epoch][k-1], test_loss[epoch][k-1], test_corr[epoch][k-1])
+		#k, 'Few shot', epoch, 'meta training:', train_loss[epoch][k-1], train_corr[epoch][k-1], test_loss[epoch][k-1], test_corr[epoch][k-1])
 
 	# Collect a meta batch update
 	grads = []
@@ -274,7 +275,7 @@ for epoch in range( args.num_updates ):
 	meta_train_loss, meta_train_corr, meta_val_loss, meta_val_corr = np.zeros((meta_batch_size,)), np.zeros((meta_batch_size,)), np.zeros((meta_batch_size,)), np.zeros((meta_batch_size,))
 	
 	for i in range( meta_batch_size ):
-	
+		train_feature = train_feature.astype(np.float32)
 		observed_train_loader, observed_test_loader = get_observed_data_loader( train_feature, train_label, tissue_index_list, K, args.inner_batch_size, args.tissue_num )
 		#observed_train_loader, observed_test_loader = get_observed_data_loader( train_feature, train_label, tissue_index_list, K, K)
 	
@@ -294,29 +295,32 @@ for epoch in range( args.num_updates ):
 		bad_counter += 1
 
 	if bad_counter == args.patience:
-		print("Ran out of patience. Breaking out...")
+		#print("Ran out of patience. Breaking out...")
 		break
 
-	print('Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch)
+	#print('Meta update', epoch, meta_train_loss.mean(), meta_train_corr.mean(), meta_val_loss.mean(), meta_val_corr.mean(), 'best epoch', best_epoch)
 	# Perform the meta update
 	meta_update( observed_test_loader, grads )
-print('Best loss meta training:', test_corr[best_epoch])
+#print('Best loss meta training:', test_corr[best_epoch])
 
 base_line_outpath = "/results/TCRP_performances/" + args.drug + '/' + args.tissue + '/'
 os.system("mkdir -p {}".format(base_line_outpath))
 new_test_corr = test_corr[test_corr != 0]
-new_zero_test_corr = zero_test_corr.data.cpu().numpy()
+if isinstance(zero_test_corr,int):
+	corr_zero = zero_test_corr
+else:
+	corr_zero = zero_test_corr.data.cpu().numpy()
+best_corr = test_corr[best_epoch]
+corr_mean = np.mean(test_corr[best_epoch])
+print ("corr mean",corr_mean)
 results = {}
-results["TCRP-zero"] = new_zero_test_corr
-print("here")
-print(test_corr[best_epoch].shape)
+results["TCRP-zero"] = corr_zero
+#print("here")
 results["TCRP-fewshot"] = test_corr[best_epoch]
-print(results["TCRP-fewshot"])
+#print(results["TCRP-fewshot"])
 np.savez(
-	base_line_outpath + "TCRP_performance"+"_"+args.meta_lr+"_"args.inner_lr, 
+	base_line_outpath + "TCRP_performance"+"_"+str(args.meta_lr)+"_"+str(args.inner_lr), 
 	**results
 )
 print('Best corr meta training:', test_corr[best_epoch])
 print("zero",zero_test_corr)
-
-
