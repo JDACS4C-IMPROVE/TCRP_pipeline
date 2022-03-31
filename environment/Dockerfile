@@ -33,12 +33,5 @@ RUN pip3 install -U --no-cache-dir \
     sklearn==0.0 \
     torch==1.10.2
 
-RUN mkdir /.code-server \
-	&& cd /.code-server \
-	&& curl -L "https://github.com/coder/code-server/releases/download/v4.0.2/code-server-4.0.2-linux-amd64.tar.gz" -o code-server.tar.gz \
-	&& tar -xvf code-server.tar.gz \
-	&& rm code-server.tar.gz \
-	&& ln -s /.code-server/code-server-4.0.2-linux-amd64/bin/code-server  /usr/bin/code-server
-
 COPY postInstall /
 RUN /postInstall
