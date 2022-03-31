@@ -12,10 +12,14 @@ The steps that can be taken using this respository to fully reproduce documented
 - move the output direcotyr, `merged_performances`, to the "data" directory 
 - run the file /code/tcrp/model_comparisons/1-gather-baselines-and-fewshot.ipynb to get the comparison figures.
 ## End to End
+- make a "results" directory in this repository
 - copy the `total_data` results folder from TCRP_data to this repository, under the "data" directory 
-- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "baseline".
-- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "tcrp".
-
+- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "baseline". (you may have to change paths to the code and data folder throughout the code)
+- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "tcrp". (you may have to change paths to the code and data folder throughout the code)
+- run the "run" file. Performance results will be saved to your results directory, fewshot data will be saved to your data directory. 
+ 
+----------------
+#Original Code 
 
 # tcrp-reproduce
 Refactored TCRP codebase with improved organization and additional code for data transformation and model selection. The original codebase can be accessed [here](https://github.com/idekerlab/TCRP). For high level questions regarding TCRP, check out the [TCRP FAQ](https://github.com/shfong/tcrp-reproduce/blob/public/tcrp-faq.md). 

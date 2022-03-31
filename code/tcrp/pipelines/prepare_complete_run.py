@@ -50,7 +50,6 @@ print(missing)
 print(len(missing))
 
 remaining_drugs = list(set(drugs).difference(priority))
-#remaining_drugs = list(set(priority).difference(drugs))
 priority = list(set(priority).difference(missing))
 remaining_drugs_chunked = make_chunks(remaining_drugs, n_gpus)
 priority_chunked = make_chunks(priority, n_gpus)
@@ -61,7 +60,6 @@ fewshot_data_path = "/data/fewshot_data"
 print(enumerate(zip(priority_chunked, remaining_drugs_chunked)))
 for i, (a, b) in enumerate(zip(priority_chunked, remaining_drugs_chunked)):
 #for i in enumerate(zip(priority_chunked)):
-    print("Here")
     #_drugs = a + b 
     _drugs = a
     drug_input_file = task_directory + '/drugs_input_{}'.format(i)
