@@ -19,7 +19,7 @@ The steps that can be taken using this respository to fully reproduce documented
 - run the "run" file. Performance results will be saved to your results directory, fewshot data will be saved to your data directory. 
  
 ----------------
-#Original Code 
+# Original Code 
 
 # tcrp-reproduce
 Refactored TCRP codebase with improved organization and additional code for data transformation and model selection. The original codebase can be accessed [here](https://github.com/idekerlab/TCRP). For high level questions regarding TCRP, check out the [TCRP FAQ](https://github.com/shfong/tcrp-reproduce/blob/public/tcrp-faq.md). 
