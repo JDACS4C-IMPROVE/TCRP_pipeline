@@ -20,7 +20,7 @@ filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
 work_dic = '/data/merged/'
-job_directory = '/results/{}/'.format(args.run_name)
+job_directory = '/code/tcrp/created_models/
 
 file_handle = open( drug_list_file )
 
