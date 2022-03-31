@@ -1,7 +1,7 @@
 #!/bin/bash
 python=/opt/conda/bin/python
 mkdir /results/KU-55933
-$python /root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py--tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --run_name 210803_drug-baseline-models
+$python /root/capsule/code/tcrp/pipelines/generate_baseline_job_cv.py --tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --run_name 210803_drug-baseline-models
 $python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --tissue_num 6 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.1 --layer 1 --run_name 210803_drug-baseline-models > /results/KU-55933/PDTC_KU-55933_0.1_0.1_1_6.log
 $python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --tissue_num 12 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.1 --layer 1 --run_name 210803_drug-baseline-models > /results/KU-55933/PDTC_KU-55933_0.1_0.1_1_12.log
 $python /root/capsule/code/tcrp/model/MAML_DRUG.py --tissue PDTC --drug KU-55933 --K 10 --num_trials 20 --tissue_num 20 --meta_batch_size 10 --meta_lr 0.1 --inner_lr 0.1 --layer 1 --run_name 210803_drug-baseline-models > /results/KU-55933/PDTC_KU-55933_0.1_0.1_1_20.log

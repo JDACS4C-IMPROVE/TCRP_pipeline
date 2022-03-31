@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
-set -exv
+set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-bash tune.sh "$@"
+bash MAML_commands.sh "$@"
 
 # The previous version of this file was commented-out and follows below:
 #
 # #!/usr/bin/env bash
 # set -exv
-# bash /code/MAML_commands.sh
+# 
+# # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
+# sh /code/MAML_commmands.sh
+# # The previous version of this file was commented-out and follows below:
+# #
+# # #!/usr/bin/env bash
+# # set -exv
+# # bash /code/MAML_commands.sh
+# 
