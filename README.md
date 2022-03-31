@@ -5,8 +5,14 @@ This code has been used in a reproducibility challenge. This code can be used to
 Note: The TCRP data repsitory must be visited first.
 
 The steps that can be taken using this respository to fully reproduce documented results are the following: 
+
 ## Before Starting 
 Install all the dependencies specified the requirements.txt file or use the Docker file (must have GPU available) 
+paths pointing to data-files in the following scripts must be edited to reflect absolute paths
+- `code/pipelines/generate_fewshot_samples.py`
+- `code/baselines/baseline_DRUG.py`
+- `code/model/MAML_DRUG.py`
+- `code/pipelines/prepare_complete_run.py`
 ## Quick Start:
 - make a "results" directory in this repository
 - generate baseline and MAMl performances in predicting drug response in PDTC cells by executing the bash script /code/run
