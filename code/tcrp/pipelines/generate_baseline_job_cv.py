@@ -46,12 +46,8 @@ for line in file_handle:
 		tissue_map = pickle.load(f)
 
 	# for tissue, tissue_cell_line in tissue_map.items():
-	print(tissue_map.keys())
 	tissue = "PDTC"
 	tissue_cell_line = tissue_map[tissue]
-	# if len(tissue_cell_line) < 15:
-	# 	continue
-	# Assuming fewshot samples already exist...
 	cmd_str = 'python ' + dir_name + '/' + 'generate_fewshot_samples.py ' + '--tissue {} --drug {} --K 10 --num_trials 20 --run_name {}'.format(tissue, gene, args.run_name)
 	cmd_list.append(cmd_str)
 	
