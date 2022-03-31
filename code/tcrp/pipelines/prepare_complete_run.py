@@ -38,7 +38,7 @@ else:
 
 os.system("mkdir -p {}".format(task_directory))
 
-drugs = glob("/data/merged/*.pkl")
+drugs = glob("/data/total_data/*.pkl")
 drugs = [drug.split('/')[-1].split('_tissue_cell_line_list.pkl')[0] for drug in drugs]
 
 with open('/code/tcrp/pipelines/priority_drugs') as f: 

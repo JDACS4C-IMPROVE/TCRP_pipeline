@@ -2,14 +2,19 @@
 # Reproducibility instructions:
 This code has been used in a reproducibility challenge. This code can be used to generate an end to end pipeline for baseline performance and few-shot learning corresponding to the paper "Few-shot learning creates predictive models of drug response that translate from high-throughput screens to individual patients".
 
+Note: The TCRP data repsitory must be visited first.
+
 The steps that can be taken using this respository to fully reproduce documented results are the following: 
 ## Quick Start:
 - make a "results" directory in this repository
 - generate baseline and MAMl performances in predicting drug response in PDTC cells by executing the bash script /code/run
 - this script will run the scripts PDTC_commands.sh and MAML_commands.sh respectively. 
-
-
-
+- move the output direcotyr, `merged_performances`, to the "data" directory 
+- run the file /code/tcrp/model_comparisons/1-gather-baselines-and-fewshot.ipynb to get the comparison figures.
+## End to End
+- copy the `total_data` results folder from TCRP_data to this repository, under the "data" directory 
+- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "baseline".
+- run the file `/code/tcrp/pipelines/prepare_complete_run.py` with run_mode (line 31) set to "tcrp".
 
 
 # tcrp-reproduce
