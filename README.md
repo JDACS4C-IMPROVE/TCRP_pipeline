@@ -7,7 +7,7 @@ Note: The TCRP data repsitory must be visited first.
 The steps that can be taken using this respository to fully reproduce documented results are the following: 
 
 ## Before Starting 
-Install all the dependencies specified the requirements.txt file or use the Docker file (must have GPU available) 
+Install all the dependencies specified the requirements.txt file (must have GPU available) 
 paths pointing to data-files in the following scripts must be edited to reflect absolute paths
 - `code/pipelines/generate_fewshot_samples.py`
 - `code/baselines/baseline_DRUG.py`
