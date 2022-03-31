@@ -22,7 +22,7 @@ paths pointing to data-files in the following scripts must be edited to reflect 
 - run the "run" file. Performance results will be saved to your results directory, fewshot data will be saved to your data directory. 
 - run the file /code/tcrp/model_comparisons/1-gather-baselines-and-fewshot.ipynb to get the comparison figures.
 ----------------
-# Original Code 
+# Original Repo README 
 
 # tcrp-reproduce
 Refactored TCRP codebase with improved organization and additional code for data transformation and model selection. The original codebase can be accessed [here](https://github.com/idekerlab/TCRP). For high level questions regarding TCRP, check out the [TCRP FAQ](https://github.com/shfong/tcrp-reproduce/blob/public/tcrp-faq.md). 
