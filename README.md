@@ -1,3 +1,17 @@
+# March 31st 2022 
+# Reproducibility instructions:
+This code has been used in a reproducibility challenge. This code can be used to generate an end to end pipeline for baseline performance and few-shot learning corresponding to the paper "Few-shot learning creates predictive models of drug response that translate from high-throughput screens to individual patients".
+
+The steps that can be taken using this respository to fully reproduce documented results are the following: 
+## Quick Start:
+- make a "results" directory in this repository
+- generate baseline and MAMl performances in predicting drug response in PDTC cells by executing the bash script /code/run
+- this script will run the scripts PDTC_commands.sh and MAML_commands.sh respectively. 
+
+
+
+
+
 # tcrp-reproduce
 Refactored TCRP codebase with improved organization and additional code for data transformation and model selection. The original codebase can be accessed [here](https://github.com/idekerlab/TCRP). For high level questions regarding TCRP, check out the [TCRP FAQ](https://github.com/shfong/tcrp-reproduce/blob/public/tcrp-faq.md). 
 

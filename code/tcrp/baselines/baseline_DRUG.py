@@ -312,7 +312,7 @@ def make_predictions(model, X, y):
 	return out[0,1]
 
 
-base_line_outpath = "/results/baseline_performances/" + args.drug + '/' + args.tissue + '/'
+base_line_outpath = "/results/merged_performances/baseline_performances/" + args.drug + '/' + args.tissue + '/'
 os.system("mkdir -p {}".format(base_line_outpath))
 
 models = [

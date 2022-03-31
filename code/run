@@ -2,6 +2,7 @@
 set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
+bash PDTC_commands.sh "$@"
 bash MAML_commands.sh "$@"
 
 # The previous version of this file was commented-out and follows below:
