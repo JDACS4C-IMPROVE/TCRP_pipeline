@@ -1,6 +1,6 @@
 # March 31st 2022 
 # Reproducibility instructions:
-This code has been used in a reproducibility challenge. This code can be used to generate an end to end pipeline for baseline performance and few-shot learning corresponding to the paper "Few-shot learning creates predictive models of drug response that translate from high-throughput screens to individual patients".
+This code has been used in a reproducibility challenge. This code can be used to generate an end to end pipeline for baseline performance and few-shot learning corresponding to the paper "Few-shot learning creates predictive models of drug response that translate from high-throughput screens to individual patients". The workflow provided is to specifically reproduce, as best as possible, results for Challenge 2 of the paper: transfer to PDTCs.
 
 Note: The TCRP data repsitory must be visited first.
 
