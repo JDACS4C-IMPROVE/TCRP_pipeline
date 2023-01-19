@@ -15,4 +15,4 @@ num_inner_updates = 1
 num_updates = 20
 seed = 19
 patience = 3
-output_path = "/infodev1/non-phi-data/junjiang/candle_data_dir"
+output_path = "/path_to/junjiang/candle_data_dir"

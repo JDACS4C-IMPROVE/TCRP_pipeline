@@ -26,7 +26,7 @@ filepath = os.path.realpath(__file__)
 dir_name = os.path.dirname(filepath)
 home_dir = os.path.dirname(os.path.dirname(dir_name))
 project_root = os.path.dirname(home_dir)
-data_root = "/infodev1/non-phi-projects/junjiang/TCRP_pipeline/data"
+data_root = "/path_to/junjiang/TCRP_pipeline/data"
 work_dic = os.path.join(data_root, "data", "merged")
 data_dic = os.path.join(data_root, "data", "merged", "drug_feature")
 
