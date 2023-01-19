@@ -1,0 +1,18 @@
+[Global_Params]
+model_name='tcrp'
+tissue = "PDTC"
+drug = "AZ628"
+num_trials = 5 #TODO: should be smaller than tissue_num
+tissue_num = 6
+inner_batch_size = 10
+meta_batch_size = 10
+k_shot = 5  # Perform K shot learning
+layer = 1
+hidden = 5
+meta_lr = 0.001
+inner_lr = 0.01
+num_inner_updates = 1
+num_updates = 20
+seed = 19
+patience = 3
+output_path = "/infodev1/non-phi-data/junjiang/candle_data_dir"
